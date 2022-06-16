@@ -33,6 +33,9 @@ async function run() {
         app.delete('/todo/:id', async (req, res) => {
             res.send(await todoCollection.deleteOne({ _id: ObjectId(req.params.id) }))
         })
+        app.delete('/todos/completed', async (req, res) => {
+            res.send(await todoCollection.deleteMany({ completed: true }))
+        })
 
     } finally {
     }
