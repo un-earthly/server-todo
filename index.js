@@ -20,15 +20,9 @@ async function run() {
         app.post('/todo', async (req, res) => {
             res.send(await todoCollection.insertOne(req.body))
         })
-        app.put('/todo/:id', async (req, res) => {
-            const options = { upsert: true };
-            const updateDoc = {
-                $set: {
-                    completed: true
-                },
-            };
-            res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
-
+        app.post('/todo/search', async (req, res) => {
+            const query = req.body.query
+            res.send(await todoCollection.findOne({ title: query }))
         })
         app.delete('/todo/:id', async (req, res) => {
             res.send(await todoCollection.deleteOne({ _id: ObjectId(req.params.id) }))
