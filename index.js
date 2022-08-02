@@ -25,7 +25,7 @@ async function run() {
             res.send(await todoCollection.findOne({ title: query }))
         })
 
-        app.put('/todo/:id', async (req, res) => {
+        app.put('/todo/:id/completed', async (req, res) => {
             const options = { upsert: true };
             const updateDoc = {
                 $set: {
@@ -34,23 +34,17 @@ async function run() {
             };
             res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
         })
-        app.put('/todo/:id/add-comment', async (req, res) => {
+        app.put('/todo/:id', async (req, res) => {
             const options = { upsert: true };
-            const updateDoc = {
-                $set: {
-                    comment: req.body.comment
-                },
-            };
-            res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
-        })
-        app.patch('/todo/:id', async (req, res) => {
+
             const updateDoc = {
                 $set: {
                     title: req.body.title,
                     desc: req.body.desc,
+                    comment: req.body.comment
                 },
             };
-            res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc))
+            res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
         })
 
         app.delete('/todo/:id', async (req, res) => {
