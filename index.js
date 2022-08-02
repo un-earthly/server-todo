@@ -34,11 +34,24 @@ async function run() {
             };
             res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
         })
+        // app.get('/todo/comments', async (req, res) => {
+        //     const result = todoCollection.find({ email: req.query.email }).toArray()
+        //     res.send(result)
+        // })
+        app.put('/todo/:id/add-comment', async (req, res) => {
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    comment: req.body.comment
+                },
+            };
+            res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
+        })
         app.patch('/todo/:id', async (req, res) => {
             const updateDoc = {
                 $set: {
                     title: req.body.title,
-                    desc: req.body.desc
+                    desc: req.body.desc,
                 },
             };
             res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc))
