@@ -20,10 +20,6 @@ async function run() {
         app.post('/todo', async (req, res) => {
             res.send(await todoCollection.insertOne(req.body))
         })
-        app.post('/todo/search', async (req, res) => {
-            const query = req.body.query
-            res.send(await todoCollection.findOne({ title: query }))
-        })
 
         app.put('/todo/:id/completed', async (req, res) => {
             const options = { upsert: true };
@@ -36,21 +32,13 @@ async function run() {
         })
         app.put('/todo/:id', async (req, res) => {
             const options = { upsert: true };
-            let updateDoc;
-            if (req.body.title.length > 0 && req.body.desc.length > 0) {
-                updateDoc = {
-                    $set: {
-                        title: req.body.title,
-                        desc: req.body.desc,
-                        comment: req.body.comment
-                    },
-                }
-            } else {
-                updateDoc = {
-                    $set: {
-                        comment: req.body.comment
-                    },
-                }
+            const previousDesc = await todoCollection.findOne({ _id: ObjectId(req.params.id) })
+            const updateDoc = {
+                $set: {
+                    title: req.body.title || previousDesc.title,
+                    desc: req.body.desc || previousDesc.desc,
+                    comment: req.body.comment
+                },
             }
             res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
         })
