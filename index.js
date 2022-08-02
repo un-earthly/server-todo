@@ -34,10 +34,6 @@ async function run() {
             };
             res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
         })
-        // app.get('/todo/comments', async (req, res) => {
-        //     const result = todoCollection.find({ email: req.query.email }).toArray()
-        //     res.send(result)
-        // })
         app.put('/todo/:id/add-comment', async (req, res) => {
             const options = { upsert: true };
             const updateDoc = {
