@@ -34,6 +34,15 @@ async function run() {
             };
             res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
         })
+        app.patch('/todo/:id', async (req, res) => {
+            const updateDoc = {
+                $set: {
+                    title: req.body.title,
+                    desc: req.body.desc
+                },
+            };
+            res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc))
+        })
 
         app.delete('/todo/:id', async (req, res) => {
             res.send(await todoCollection.deleteOne({ _id: ObjectId(req.params.id) }))
