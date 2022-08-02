@@ -36,14 +36,22 @@ async function run() {
         })
         app.put('/todo/:id', async (req, res) => {
             const options = { upsert: true };
-
-            const updateDoc = {
-                $set: {
-                    title: req.body.title,
-                    desc: req.body.desc,
-                    comment: req.body.comment
-                },
-            };
+            let updateDoc;
+            if (req.body.title.length > 0 && req.body.desc.length > 0) {
+                updateDoc = {
+                    $set: {
+                        title: req.body.title,
+                        desc: req.body.desc,
+                        comment: req.body.comment
+                    },
+                }
+            } else {
+                updateDoc = {
+                    $set: {
+                        comment: req.body.comment
+                    },
+                }
+            }
             res.send(await todoCollection.updateOne({ _id: ObjectId(req.params.id) }, updateDoc, options))
         })
 
