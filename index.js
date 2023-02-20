@@ -53,7 +53,7 @@ async function run() {
     } finally {
     }
 }
-run().catch(console.dir);
+run();
 app.get('/', (req, res) => {
     res.send('Hello World! todo server is up n runnin')
 })
